@@ -1,0 +1,11 @@
+<div>
+  <div class="flex justify-between items-baseline mb-xs">
+    <span class="font-mono text-label uppercase text-nd-text-secondary">STORAGE</span>
+    <span class="font-mono text-label text-nd-text-primary">70%</span>
+  </div>
+  <div class="flex gap-2xs w-full">
+    <%= for filled? <- [true, true, true, true, true, true, true, false, false, false] do %>
+      <div class={"flex-1 h-3 #{if filled?, do: "bg-nd-text-display dark:bg-nd-text-display", else: "bg-nd-border dark:bg-nd-border"}"}></div>
+    <% end %>
+  </div>
+</div>

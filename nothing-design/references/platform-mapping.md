@@ -67,6 +67,8 @@ Use `get_font_family_info` to verify fonts before writing styles. Direct hex val
 
 ## 4. PHOENIX / LIVEVIEW / HEEx
 
+Standalone HEEx fixture files for each component below live in `fixtures/liveview/` at the repo root, organized by category (cards, buttons, inputs, data_rows, tags, progress, toggles, tables, empty_states, layouts). These are validated by CI via `zaalipro/liveview-skill-validator` — see `VALIDATION.md` for the QA boundary.
+
 ### 4.1 Font Loading
 
 Load Google Fonts in `lib/app_web/components/layouts/root.html.heex` (the outermost HTML template):

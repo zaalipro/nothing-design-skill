@@ -1,0 +1,65 @@
+name: Validate LiveView HEEx Fixtures
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate HEEx fixtures
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout nothing-design-skill
+        uses: actions/checkout@v4
+        with:
+          path: skill
+
+      - name: Checkout liveview-skill-validator
+        uses: actions/checkout@v4
+        with:
+          repository: zaalipro/liveview-skill-validator
+          path: validator
+
+      - name: Set up Elixir
+        uses: erlef/setup-beam@v1
+        with:
+          elixir-version: "1.18"
+          otp-version: "27"
+
+      - name: Copy fixtures into validator
+        run: |
+          mkdir -p validator/test/support/samples/nothing_design
+          cp -r skill/fixtures/liveview/* validator/test/support/samples/nothing_design/
+
+      - name: Cache Mix dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            validator/deps
+            validator/_build
+          key: ${{ runner.os }}-mix-${{ hashFiles('validator/**/mix.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-mix-
+
+      - name: Install dependencies
+        working-directory: validator
+        run: mix deps.get
+
+      - name: Compile with strict warnings
+        working-directory: validator
+        run: mix compile --warnings-as-errors
+
+      - name: Run validator tests
+        working-directory: validator
+        run: mix test
+
+      - name: Validate Nothing Design fixtures
+        working-directory: validator
+        run: |
+          mix eval 'LiveviewSkillValidator.SkillValidator.validate_directory("test/support/samples/nothing_design", %{}) |> Enum.each(fn {path, result} -> case result do {:ok, _} -> IO.puts("OK: #{path}"); {:error, reason} -> IO.puts("FAIL: #{path} - #{reason}"); System.halt(1) end end)'

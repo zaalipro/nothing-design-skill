@@ -1,0 +1,18 @@
+<table class="w-full">
+  <thead>
+    <tr class="border-b border-nd-border-visible dark:border-nd-border-visible">
+      <th class="font-mono text-label uppercase text-nd-text-secondary px-4 py-3 text-left">Node</th>
+      <th class="font-mono text-label uppercase text-nd-text-secondary px-4 py-3 text-right">Throughput</th>
+      <th class="font-mono text-label uppercase text-nd-text-secondary px-4 py-3 text-right">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for node <- [%{name: "node-1", throughput: "1.2 GB/s", status_color: "text-nd-success", status: "OK"}, %{name: "node-2", throughput: "0.8 GB/s", status_color: "text-nd-warning", status: "DEGRADED"}] do %>
+      <tr class="border-b border-nd-border dark:border-nd-border hover:bg-nd-raised dark:hover:bg-nd-raised transition-colors">
+        <td class="font-sans text-body text-nd-text-primary dark:text-nd-text-primary px-4 py-3"><%= node.name %></td>
+        <td class="font-mono text-body text-nd-text-primary dark:text-nd-text-primary px-4 py-3 text-right"><%= node.throughput %></td>
+        <td class={"font-mono text-caption uppercase px-4 py-3 text-right #{node.status_color}"}><%= node.status %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
